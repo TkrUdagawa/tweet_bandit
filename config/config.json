@@ -1,0 +1,42 @@
+{
+    "port":9300,
+    "category": {
+	"IT" : {
+	    "port": 9301,
+	    "user": [
+		"IHayato",
+		"jptechcrunch",
+		"gizmodojapan",
+		"sradjp"
+	    ]
+	},
+	"popular": {
+	    "port": 9302,
+	    "user": [
+		"ariyoshihiroiki",
+		"pamyurin",
+		"matsu_bouzu",
+		"RolaWorLD",
+		"kojiharunyan"
+	    ]
+	},
+	"news":{
+	    "port": 9304,
+	    "user": [
+		"nikkei",
+		"asahi",
+		"mainichi",
+		"Yomiuri_Online"
+	    ]
+	},
+	"NTT" : {
+	    "port": 9303,
+	    "user": [
+		"NTTPR",
+		"docomo",
+		"NTTDATA_PR",
+		"NTTCom_online"
+	    ]
+	}
+    }
+}
