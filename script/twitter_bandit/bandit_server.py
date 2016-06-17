@@ -10,6 +10,7 @@ from twitter_bandit.tweet_getter import TweetGetter
 
 class IndexHandler(tornado.web.RequestHandler):
     def get(self):
+        print ("get")
         self.render("index.html")
 
 class BanditHandler(tornado.websocket.WebSocketHandler):
@@ -78,8 +79,36 @@ class BanditHandler(tornado.websocket.WebSocketHandler):
                 print (arm_info[category])
                 self.write_message(json.dumps({"type":"update", "user":userid, "category":category}))
 
+        elif message_type == "reset":
+            bandit_client.reset_arm()
+            self.write_message(json.dumps({"type":"reset", "msg":"arms are reset"}))
+
+        elif message_type == "save":
+            bandit_client.save()
+            self.write_message(json.dumps({"type":"save", "msg":"models are saved"}))
+
+        elif message_type == "display_arm":
+            arm_info = bandit_client.get_arm_info("global")
+            arm_dict = convert_arm_info_to_json(arm_info)
+            self.write_message(json.dumps({"type":"display", "arm_info":arm_dict}))
+
     def on_close(self):
         print("web socket closed")
+
+
+def convert_arm_info_to_json(arm_info):
+    result_dict = {}
+    for category in arm_info:
+        result_dict[category] = {}
+        total_trial = 0
+        for arm in arm_info[category]:
+            result_dict[category][arm] = {}
+            trial_count = arm_info[category][arm].trial_count
+            total_trial += trial_count
+            result_dict[category][arm]["trial_count"] = trial_count
+            result_dict[category][arm]["weight"] = arm_info[category][arm].weight
+    return result_dict
+
 
 
 class TornadoApp():
@@ -120,5 +149,9 @@ if __name__ == '__main__':
             t.initialize(json_config, access_token)
     port = 9000
     print("start tornado server listening at {}".format(port))
-    t.app.listen(port)
-    tornado.ioloop.IOLoop.instance().start()
+    server = httpserver.HTTPServer(t.app)
+    server.listen(port)
+#    server.bind(port)
+#    server.start(0)
+#    t.app.listen(port)
+    tornado.ioloop.IOLoop.current().start()
