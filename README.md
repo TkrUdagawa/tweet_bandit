@@ -15,7 +15,7 @@ python setup.py install
 
 ### Launch demo servers
 ```
-./start_demo.sh
+./start_demo.sh ../config/jubabandit.conf
 ```
 
 ### Access server
