@@ -44,3 +44,12 @@ class TwitterBanditClient():
         for cl in self.client:
             result_dict[cl] = self.client[cl].get_arm_info(player)
         return result_dict
+
+    def reset_arm(self):
+        for cl in self.client:
+            self.client[cl].reset("global")
+
+    def save(self):
+        for cl in self.client:
+            self.client[cl].save(cl)
+
